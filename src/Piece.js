@@ -1,12 +1,26 @@
-Game.Piece = function (color, x, y) {
-    this.move = function (x, y) {
-        var oldX = this.x,
-            oldY = this.y;
+(function(){
 
-        this.image.x = x;
-        this.image.y = y;
-        this.x = x / Game.squareLength;
-        this.y = y / Game.squareLength;
+    var Piece = function (color, x, y) {
+        this.color = color;
+        this.x = x;
+        this.y = y;
+        this.hasMoved = false;
+
+        // Determines to where should it move
+        this.direction = this.color === 'black' ? 1 : -1;
+
+        setupImage.call(this, null);
+    };
+
+    Piece.prototype.move = function (x, y) {
+
+        Game.board[this.y][this.x] = null;
+
+        this.image.x = x * Game.squareLength;
+        this.image.y = y * Game.squareLength;
+
+        this.x = x;
+        this.y = y;
         this.hasMoved = true;
 
         // Handles eliminating pieces
@@ -16,7 +30,6 @@ Game.Piece = function (color, x, y) {
 
         // Updates the game boards. Eliminating duplicates
         Game.board[this.y][this.x] = this;
-        Game.board[oldY][oldX] = null;
 
         // Changes the Pawn to Queen if it reaches the last slot
         // TODO: Allows the player to select any non-king piece
@@ -32,7 +45,7 @@ Game.Piece = function (color, x, y) {
             var tower = Game.board[this.y][this.x+this.direction*-1];
             this.moveToEncastling = false;
 
-            return tower.move((this.x+this.direction) * Game.squareLength, this.y * Game.squareLength);
+            return tower.move(this.x+this.direction, this.y);
         }
 
         // Erases higligted squares
@@ -42,7 +55,7 @@ Game.Piece = function (color, x, y) {
         Game.state.changeTurn();
     };
 
-    this.setupImage = function () {
+    var setupImage = function () {
         var imageName = this.color + this.name,
             x = this.x * Game.squareLength,
             y = this.y * Game.squareLength;
@@ -55,11 +68,11 @@ Game.Piece = function (color, x, y) {
 
         // Fires up the move routine when clicked
         this.image.inputEnabled = true;
-        this.image.events.onInputDown.add(this.handlePossibleMoves, this);
+        this.image.events.onInputDown.add(handlePossibleMoves, this);
         this.image.input.priorityID = 0;
     };
 
-    this.handlePossibleMoves = function () {
+    var handlePossibleMoves = function () {
         if(Game.turn !== this.color){
             return;
         }
@@ -77,13 +90,6 @@ Game.Piece = function (color, x, y) {
         }, this);
     };
 
-    this.color = color;
-    this.x = x;
-    this.y = y;
-    this.hasMoved = false;
-
-    // Determines to where should it move
-    this.direction = this.color === 'black' ? 1 : -1;
-
-    this.setupImage();
-};
+    Game.Piece = Piece;
+    
+}());

@@ -1,70 +1,57 @@
-Game.King = function() {
-    this.name = 'King';
-    this.moveToEncastling = false;
-    Game.Piece.apply(this, arguments);
-}
+(function(){
 
-Game.King.prototype = Object.create(Game.Piece.prototype);
-Game.King.prototype.encastling = function(){
-    var bothPiecesHaveMoved = this.hasMoved || Game.board[this.y][this.y].hasMoved;
+    var King = function() {
+        this.name = 'King';
+        Game.Piece.apply(this, arguments);
+
+        this.moveToEncastling = false;
+    }
     
-    if(bothPiecesHaveMoved){
-        return false;
+    King.prototype = Object.create(Game.Piece.prototype);
+
+    King.prototype.encastling = function(){
+        // y of the king is always x of the possible encastling rook
+        var rowRef = Game.board[this.y],
+            bothPiecesHaveMoved = this.hasMoved || rowRef[this.y].hasMoved;
+
+        if(!bothPiecesHaveMoved && betweenIsEmpty(rowRef, this)) {
+            this.moveToEncastling = true;
+            return {
+                'x': this.x+this.direction * -2,
+                'y': this.y
+            };
+        } else {
+            return false;
+        }
     }
 
-    if(!(Game.board[this.y][this.x+this.direction*-1] && Game.board[this.y][this.x+this.direction*-2])){
-        this.moveToEncastling = true;
-        return {
-            'x': this.x+this.direction * -2,
-            'y': this.y
-        };
+    King.prototype.getPossibleMoves = function () {
+        var encastling = this.encastling(),
+            possible = [];
+        
+        // Functional way to make the king moves
+        _.each(_.range(this.x-1, this.x+2), function(x){
+
+            _.each(_.range(this.y-1, this.y+2), function(y){
+                possible.push({'x' : x, 'y': y});
+            });
+
+        }, this);
+
+        if(encastling){
+            possible.push(encastling);
+        }
+
+        return Game.Possible.eliminateOutOfBoard(possible);
+    };
+
+    var betweenIsEmpty = function(row, king){
+        return !(
+            row[king.x+king.direction*-1] 
+                && 
+            row[king.x+king.direction*-2]
+        );
     }
 
-    return false;
-}
-
-Game.King.prototype.getPossibleMoves = function () {
-    // Todo: Add encastling
-    var possible = [
-        {
-            'x': this.x,
-            'y': this.y - 1
-        },
-        {
-            'x': this.x + 1,
-            'y': this.y - 1
-        },
-        {
-            'x': this.x + 1,
-            'y': this.y
-        },
-        {
-            'x': this.x + 1,
-            'y': this.y + 1
-        },
-        {
-            'x': this.x,
-            'y': this.y + 1
-        },
-        {
-            'x': this.x - 1,
-            'y': this.y + 1
-        },
-        {
-            'x': this.x - 1,
-            'y': this.y
-        },
-        {
-            'x': this.x - 1,
-            'y': this.y - 1
-        },
-    ];
-
-    var encastling = this.encastling();
-
-    if(this.encastling()){
-        possible.push(encastling);
-    }
-
-    return Game.Possible.eliminateOutOfBoard(possible);
-};
+    Game.King = King;
+}())
