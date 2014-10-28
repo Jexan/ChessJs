@@ -2,9 +2,6 @@ Game.Pawn = function() {
     this.name = 'Pawn';
 
     Game.Piece.apply(this, arguments);
-    
-    // Determines to where should it move
-    this.direction = this.color === 'black' ? 1 : -1;
 }
 
 Game.Pawn.prototype = Object.create(Game.Piece.prototype);

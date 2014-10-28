@@ -23,14 +23,22 @@ Game.Piece = function (color, x, y) {
         if(this.name === 'Pawn'){
             if(this.y === 0 || this.y === 7){
                 this.image.kill();
-                Game.board[this.y][this.x] = new Queen(this.color, this.x, this.y);
+                Game.board[this.y][this.x] = new Game.Queen(this.color, this.x, this.y);
             }
+        }
+
+        // Moves the tower when encastling
+        if(this.name === 'King' && this.moveToEncastling){
+            var tower = Game.board[this.y][this.x+this.direction*-1];
+            this.moveToEncastling = false;
+
+            return tower.move((this.x+this.direction) * Game.squareLength, this.y * Game.squareLength);
         }
 
         // Erases higligted squares
         Game.state.possibleSquares.removeAll();
 
-        // Passes the turn
+        // Pass the turn
         Game.state.changeTurn();
     };
 
@@ -64,7 +72,6 @@ Game.Piece = function (color, x, y) {
         // Removes unvalid movements
         possibleMoves = Game.Possible.removeAlliedPieces(this, possibleMoves);
 
-
         _.each(possibleMoves, function(move){
             Game.Possible.drawPossible(this, move);
         }, this);
@@ -74,6 +81,9 @@ Game.Piece = function (color, x, y) {
     this.x = x;
     this.y = y;
     this.hasMoved = false;
+
+    // Determines to where should it move
+    this.direction = this.color === 'black' ? 1 : -1;
 
     this.setupImage();
 };

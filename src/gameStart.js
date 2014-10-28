@@ -4,6 +4,5 @@ Game.chess = new Phaser.Game(
 );
 
 
-
 Game.chess.state.add('main', Game.state);
 Game.chess.state.start('main');
