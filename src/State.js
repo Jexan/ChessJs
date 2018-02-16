@@ -7,20 +7,16 @@
 
 		this.load.image('blackSquare', 'imgs/square.png');
 		this.load.image('possibleSquare', 'imgs/possibleMove.png');
-
+		
 		// Pieces images loading
-		this.load.image('blackPawn', 'imgs/blackPawn.png');
-		this.load.image('whitePawn', 'imgs/whitePawn.png');
-		this.load.image('blackKing', 'imgs/blackKing.png');
-		this.load.image('whiteKing', 'imgs/whiteKing.png');
-		this.load.image('blackQueen', 'imgs/blackQueen.png');
-		this.load.image('whiteQueen', 'imgs/whiteQueen.png');
-		this.load.image('blackRook', 'imgs/blackRook.png');
-		this.load.image('whiteRook', 'imgs/whiteRook.png');
-		this.load.image('blackKnight', 'imgs/blackKnight.png');
-		this.load.image('whiteKnight', 'imgs/whiteKnight.png');
-		this.load.image('blackBishop', 'imgs/blackBishop.png');
-		this.load.image('whiteBishop', 'imgs/whiteBishop.png');
+		_.each(['Pawn', 'King', 'Queen', 'Rook', 'Knight', 'Bishop'], 
+			function(piece){
+				_.each(['white', 'black'], function(color){
+					var pieceName = color + piece;
+				 					
+					this.load.image(pieceName, 'imgs/' + pieceName + '.png');
+				}, this)
+		}, this);
 	};
 
 	State.create = function(){
@@ -31,7 +27,7 @@
 		this.turnText = this.add.text(
 			Game.turnTextX, 
 			Game.turnTextY, 
-			'Turn: white', 
+			'Turn: White', 
 			Game.turnTextStyle
 		);
 	};
@@ -46,7 +42,7 @@
 			Game.turn = 'white';	
 		}
 
-		this.turnText.text = 'Turn: ' + Game.turn;
+		this.turnText.text = 'Turn: ' + Game.turn.charAt(0).toUpperCase() + Game.turn.slice(1);
 	};
 
 	// Draws Board Black Squares
@@ -84,6 +80,11 @@
 
 			_.each(row, function(token, x){
 				var piece, color;
+
+				if (token === '') {
+					Game.board[y].push(null);
+					return;
+				}
 
 				// It checks the last letter and copy 
 				// a reference of the class

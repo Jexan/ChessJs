@@ -1,63 +1,85 @@
 (function(){
     
-    var Pawn = function() {
-        this.name = 'Pawn';
+    class Pawn extends Game.Piece{
 
-        Game.Piece.apply(this, arguments);
-    }
+        getPossibleMoves() {
+            let possibleMoves = [],
+                foward = this.direction + this.y;
 
-    Pawn.prototype = Object.create(Game.Piece.prototype);
-
-    Pawn.prototype.getPossibleMoves = function () {
-        var possibleMoves = [
-                {
-                    'x': this.x,
-                    'y': this.y + this.direction
+            if (!(foward === 8 || foward === -1)) {
+                if (Game.board[foward][this.x] === null) {
+                    possibleMoves.push({
+                            'x': this.x,
+                            'y': this.y + this.direction
+                    });
                 }
-            ],
-            foward = this.direction + this.y;
 
-        // Allows the pawn to move two squares
-        if ( !this.hasMoved &&
-                Game.board[foward][this.x] === null &&
-                Game.board[foward+this.direction][this.x] === null){
+                // Allows the pawn to move two squares
+                if (!this.hasMoved && 
+                    Game.board[foward+this.direction][this.x] === null) {
+                    
+                    // doubleStep is for en-passant
+                    possibleMoves.push({
+                        'x': this.x,
+                        'y': foward + this.direction,
+                        'specialMove': doubleStep
+                    });
+                }
+            }
 
-            possibleMoves.push({
-                'x': this.x,
-                'y': foward + this.direction
-            });
-        }
-
-        // If a piece is in front of the Pawn 
-        // it can't move to that square
-        if(foward < 8 || foward >= 0){
-            if (Game.board[foward][this.x] !== null) {
-                possibleMoves.shift()
-            };
-        }
-
-        // Checks if a piece is in the pawn "killzone", 
-        // allowing the pawn to move there
-        if ( this.x > 0 && 
-                Game.board[foward][this.x - 1] !== null) {
-
-            possibleMoves.push({
+            let leftDiag = {
                 'x': this.x - 1,
                 'y': foward
-            })
-        }
-
-        if ( this.x < 7 && 
-                Game.board[foward][this.x + 1] !== null) {
-            possibleMoves.push({
+            },
+            rightDiag = {
                 'x': this.x + 1,
                 'y': foward
-            })
-        }
+            };
 
-        return possibleMoves;
-    };
+            // Checks if a piece is in the pawn "killzone", 
+            // allowing the pawn to move there
+            if (Game.board[foward][this.x - 1]) {
+                possibleMoves.push(leftDiag);
+            }
+
+            if (Game.board[foward][this.x + 1]) {
+                possibleMoves.push(rightDiag);
+            }
+
+
+            let leftPiece = Game.board[this.y][this.x-1],
+                rightPiece = Game.board[this.y][this.x+1];
+            // Checks if the side pawns are en passant
+            if (leftPiece){
+                if(leftPiece.justDoubleStepped) {
+                    leftDiag.specialMove = enPassant;
+                    possibleMoves.push(leftDiag);
+                }
+            }
+
+            if (rightPiece){
+                if(rightPiece.justDoubleStepped) {
+                    rightDiag.specialMove = enPassant;
+                    possibleMoves.push(rightDiag);
+                }
+            }
+
+
+            return possibleMoves;
+        };
+    }
+
+    let doubleStep = function(pawn) {
+        pawn.justDoubleStepped = true;
+
+        Game.doubleSteppedPawn = pawn;
+    }
+
+    let enPassant = function(pawn) {
+        // Makes sure that the piece "en passé" dies
+        Game.board[pawn.y - pawn.direction][pawn.x].image.kill();
+        Game.board[pawn.y - pawn.direction][pawn.x] = null;
+    }
 
     Game.Pawn = Pawn;
-
 }());

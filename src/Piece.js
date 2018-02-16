@@ -1,62 +1,67 @@
 (function(){
 
-    var Piece = function (color, x, y) {
-        this.color = color;
-        this.x = x;
-        this.y = y;
-        this.hasMoved = false;
+    class Piece {
+        constructor(color, x, y){
+            this.color = color;
+            this.x = x;
+            this.y = y;
+            
+            // For Pawn Double Step and Encastling
+            this.hasMoved = false;
+            this.justDoubleStepped = false;
+            // Determines to where should it move
+            this.direction = this.color === 'black' ? 1 : -1;
 
-        // Determines to where should it move
-        this.direction = this.color === 'black' ? 1 : -1;
-
-        setupImage.call(this, null);
-    };
-
-    Piece.prototype.move = function (x, y) {
-
-        Game.board[this.y][this.x] = null;
-
-        this.image.x = x * Game.squareLength;
-        this.image.y = y * Game.squareLength;
-
-        this.x = x;
-        this.y = y;
-        this.hasMoved = true;
-
-        // Handles eliminating pieces
-        if(Game.board[this.y][this.x] !== null){
-            Game.board[this.y][this.x].image.kill();
+            setupImage.call(this, null);
         }
 
-        // Updates the game boards. Eliminating duplicates
-        Game.board[this.y][this.x] = this;
+        move(x, y, specialMove) {
+            Game.board[this.y][this.x] = null;
 
-        // Changes the Pawn to Queen if it reaches the last slot
-        // TODO: Allows the player to select any non-king piece
-        if(this.name === 'Pawn'){
-            if(this.y === 0 || this.y === 7){
-                this.image.kill();
-                Game.board[this.y][this.x] = new Game.Queen(this.color, this.x, this.y);
+            if(Game.doubleSteppedPawn) {
+                Game.doubleSteppedPawn.justDoubleStepped = false;
+                Game.doubleSteppedPawn = null;
             }
-        }
 
-        // Moves the tower when encastling
-        if(this.name === 'King' && this.moveToEncastling){
-            var tower = Game.board[this.y][this.x+this.direction*-1];
-            this.moveToEncastling = false;
+            this.image.x = x * Game.squareLength;
+            this.image.y = y * Game.squareLength;
 
-            return tower.move(this.x+this.direction, this.y);
-        }
+            this.x = x;
+            this.y = y;
+            this.hasMoved = true;
 
-        // Erases higligted squares
-        Game.state.possibleSquares.removeAll();
+            // Handles eliminating pieces
+            if(Game.board[this.y][this.x] !== null){
+                Game.board[this.y][this.x].image.kill();
+            }
 
-        // Pass the turn
-        Game.state.changeTurn();
+            // Updates the game boards. Eliminating duplicates
+            Game.board[this.y][this.x] = this;
+
+            // Changes the Pawn to Queen if it reaches the last slot
+            // TODO: Allows the player to select any non-king piece
+            if(this.constructor.name === 'Pawn'){
+                if(this.y === 0 || this.y === 7){
+                    this.image.kill();
+                    Game.board[this.y][this.x] = new Game.Queen(this.color, this.x, this.y);
+                }
+            }
+
+            if (specialMove) {
+                specialMove(this);
+            }
+
+            // Erases higligted squares
+            Game.state.possibleSquares.removeAll();
+
+            // Pass the turn
+            Game.state.changeTurn();
+        };   
     };
 
-    var setupImage = function () {
-        var imageName = this.color + this.name,
+
+    let setupImage = function () {
+        let imageName = this.color + this.constructor.name,
             x = this.x * Game.squareLength,
             y = this.y * Game.squareLength;
 
@@ -72,14 +77,13 @@
         this.image.input.priorityID = 0;
     };
 
-    var handlePossibleMoves = function () {
+    let handlePossibleMoves = function () {
         if(Game.turn !== this.color){
             return;
         }
 
-        var possibleMoves = this.getPossibleMoves();
+        let possibleMoves = this.getPossibleMoves();
 
-        // We call this in case the piece to be moved
         Game.state.possibleSquares.removeAll();
 
         // Removes unvalid movements
@@ -91,5 +95,4 @@
     };
 
     Game.Piece = Piece;
-    
 }());
