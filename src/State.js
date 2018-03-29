@@ -4,19 +4,7 @@
 
 	State.preload = function(){
 		this.stage.backgroundColor= "#eeeeee";
-
-		this.load.image('blackSquare', 'imgs/square.png');
-		this.load.image('possibleSquare', 'imgs/possibleMove.png');
-		
-		// Pieces images loading
-		_.each(['Pawn', 'King', 'Queen', 'Rook', 'Knight', 'Bishop'], 
-			function(piece){
-				_.each(['white', 'black'], function(color){
-					var pieceName = color + piece;
-				 					
-					this.load.image(pieceName, 'imgs/' + pieceName + '.png');
-				}, this)
-		}, this);
+		this.load.spritesheet(Game.assetsKey, Game.assetsFilePath, 64, 64, 14);
 	};
 
 	State.create = function(){
@@ -32,17 +20,14 @@
 		);
 	};
 
-	State.update = function(){};
-
 	// Switches turn and updates the turnText text
 	State.changeTurn = function() {
-		if(Game.turn === 'white') {
-			Game.turn = 'black';
-		} else {
-			Game.turn = 'white';	
-		}
+		if(Game.turn === 'White') 
+			Game.turn = 'Black';
+		else 
+			Game.turn = 'White';	
 
-		this.turnText.text = 'Turn: ' + Game.turn.charAt(0).toUpperCase() + Game.turn.slice(1);
+		this.turnText.text = 'Turn: ' + Game.turn;
 	};
 
 	// Draws Board Black Squares
@@ -58,7 +43,7 @@
 				_x = x*Game.squareLength;
 				_y = y*Game.squareLength;
 
-				image = State.game.add.image(_x, _y, 'blackSquare');
+				image = State.game.add.image(_x, _y, Game.assetsKey, Game.assetsAtlas.blackSquare);
 				image.scale.x = Game.squareLength / image.width;
 	        	image.scale.y = Game.squareLength / image.height;
 			}
@@ -89,7 +74,7 @@
 				// It checks the last letter and copy 
 				// a reference of the class
 				switch(token.charAt(1)){
-				case 't':
+				case 'r':
 					piece = Game.Rook;
 					break;
 				case 'h':

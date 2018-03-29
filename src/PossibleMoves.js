@@ -49,7 +49,8 @@
         let image = Game.chess.add.image(
             move.x * Game.squareLength, 
             move.y * Game.squareLength, 
-            'possibleSquare'
+            Game.assetsKey,
+            Game.assetsAtlas.possibleSquare
         );
 
         image.inputEnabled = true;

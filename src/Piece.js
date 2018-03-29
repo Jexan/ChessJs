@@ -61,11 +61,11 @@
 
 
     let setupImage = function () {
-        let imageName = this.color + this.constructor.name,
+        let pieceName = this.color + this.constructor.name,
             x = this.x * Game.squareLength,
             y = this.y * Game.squareLength;
 
-        this.image = Game.chess.add.image(x, y, imageName);
+        this.image = Game.chess.add.image(x, y, Game.assetsKey, Game.assetsAtlas[pieceName]);
 
         // Scales the piece proportional to the squareLength
         this.image.scale.x = Game.squareLength / this.image.width;
@@ -78,9 +78,8 @@
     };
 
     let handlePossibleMoves = function () {
-        if(Game.turn !== this.color){
+        if(Game.turn.toLowerCase() !== this.color)
             return;
-        }
 
         let possibleMoves = this.getPossibleMoves();
 
