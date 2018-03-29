@@ -15,8 +15,15 @@
 		this.turnText = this.add.text(
 			Game.turnTextX, 
 			Game.turnTextY, 
-			'Turn: White', 
+			'TURN:', 
 			Game.turnTextStyle
+		);
+
+		this.turnColorText = this.add.text(
+			Game.turnColorTextX,
+			Game.turnColorTextY,
+			'White',
+			Game.turnTextColorStyle
 		);
 	};
 
@@ -27,7 +34,7 @@
 		else 
 			Game.turn = 'White';	
 
-		this.turnText.text = 'Turn: ' + Game.turn;
+		this.turnColorText.text = Game.turn;
 	};
 
 	// Draws Board Black Squares

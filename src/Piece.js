@@ -88,9 +88,9 @@
         // Removes unvalid movements
         possibleMoves = Game.Possible.removeAlliedPieces(this, possibleMoves);
 
-        _.each(possibleMoves, function(move){
+        _.each(possibleMoves, (move) => {
             Game.Possible.drawPossible(this, move);
-        }, this);
+        });
     };
 
     Game.Piece = Piece;

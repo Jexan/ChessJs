@@ -1,7 +1,7 @@
 // Game Constants
 const Game = {
 	windowWidth: 400,
-	windowHeigth: 480,
+	windowExtraY: 40,
 
 	board: [],
 
@@ -59,13 +59,23 @@ const Game = {
 	turn: 'White',
 
 	turnTextStyle: {
-			font: '12pt Segoe UI',
+			font: '18pt Segoe UI',
 			fill: 'black'
+	},
+
+	turnColorTextStyle: {
+			font: '18pt Segoe UI',
+			fill: '#333'
 	},
 
 	doubleSteppedPawn: null
 }
 	
-Game.turnTextX = Math.floor(Game.windowWidth * 0.5);
-Game.turnTextY = Math.floor(Game.windowWidth * 1.01);
+Game.windowHeigth = Game.windowWidth + Game.windowExtraY;
 Game.squareLength = Game.windowWidth/8;
+
+Game.turnTextX = Game.squareLength*2.5;
+Game.turnTextY = Game.windowWidth;
+
+Game.turnColorTextY = Game.windowWidth + Game.squareLength*.05;
+Game.turnColorTextX = Game.turnTextX + Game.squareLength*1.5;
