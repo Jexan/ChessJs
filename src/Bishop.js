@@ -20,14 +20,14 @@
                 if (keepAddingMoves(x, y)) break;
             }
 
-            // Down-right
+            // Bottom-right
             x = this.x + 1;
             y = this.y + 1;
             for ( ; x < 8, y < 8; x++, y++){
                 if (keepAddingMoves(x, y)) break;
             }
 
-            // Down-left
+            // Bottom-left
             x = this.x - 1;
             y = this.y - 1;
             for ( ; x >= 0, y >= 0; x--, y--){

@@ -8,9 +8,9 @@
 
             if(!eitherPieceHasMoved && betweenIsEmpty(rowRef, this)) {
                 return {
-                    'x': this.x + this.direction * -2,
-                    'y': this.y,
-                    'specialMove': encastle
+                    x: this.x + this.direction * -2,
+                    y: this.y,
+                    specialMove: encastle
                 };
             } else {
                 return false;
@@ -21,14 +21,11 @@
             let encastling = this.encastling(),
                 possible = [];
             
-            // Functional way to make the king moves
-            _.each(_.range(this.x-1, this.x+2), function(x){
-
-                _.each(_.range(this.y-1, this.y+2), function(y){
+            _.each(_.range(this.x-1, this.x+2), (x) => {
+                _.each(_.range(this.y-1, this.y+2), (y) => {
                     possible.push({'x' : x, 'y': y});
                 });
-
-            }, this);
+            });
 
             if(encastling){
                 possible.push(encastling);
@@ -47,10 +44,10 @@
     }
 
     let encastle = function(king){
+        const tower = Game.board[king.y][king.x+king.direction*-1];
         // When this is called, the king has already moved.
         king.moveToEncastling = false;
-        
-        let tower = Game.board[king.y][king.x+king.direction*-1].move(king.x+king.direction, king.y);
+        tower.move(king.x+king.direction, king.y);        
         
         Game.state.changeTurn();
     }
