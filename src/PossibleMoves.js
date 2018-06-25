@@ -13,8 +13,8 @@
                         piece.color == color){
 
                     piecesCoords.push({
-                        'x': piece.x,
-                        'y': piece.y,
+                        x: piece.x,
+                        y: piece.y,
                     });
                 }
             });
@@ -69,8 +69,8 @@
     possible.keepAdding = function(possibleMoves) {
         return function(x,y) {
             possibleMoves.push({
-                'x': x,
-                'y': y
+                x: x,
+                y: y
             });
             return Game.board[y][x] !== null;
         }

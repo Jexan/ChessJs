@@ -6,36 +6,36 @@
             // is not worth.
             return [
                 {
-                    'x': this.x + 1,
-                    'y': this.y + 2
+                    x: this.x + 1,
+                    y: this.y + 2
                 },
                 {
-                    'x': this.x + 2,
-                    'y': this.y + 1
+                    x: this.x + 2,
+                    y: this.y + 1
                 },
                 {
-                    'x': this.x + 2,
-                    'y': this.y - 1
+                    x: this.x + 2,
+                    y: this.y - 1
                 },
                 {
-                    'x': this.x + 1,
-                    'y': this.y - 2
+                    x: this.x + 1,
+                    y: this.y - 2
                 },
                 {
-                    'x': this.x - 1,
-                    'y': this.y - 2
+                    x: this.x - 1,
+                    y: this.y - 2
                 },
                 {
-                    'x': this.x - 2,
-                    'y': this.y - 1
+                    x: this.x - 2,
+                    y: this.y - 1
                 },
                 {
-                    'x': this.x - 2,
-                    'y': this.y + 1
+                    x: this.x - 2,
+                    y: this.y + 1
                 },
                 {
-                    'x': this.x - 1,
-                    'y': this.y + 2
+                    x: this.x - 1,
+                    y: this.y + 2
                 }
          	];
         }

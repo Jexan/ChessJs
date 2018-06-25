@@ -9,8 +9,8 @@
             if (!(foward === 8 || foward === -1)) {
                 if (Game.board[foward][this.x] === null) {
                     possibleMoves.push({
-                        'x': this.x,
-                        'y': this.y + this.direction
+                        x: this.x,
+                        y: this.y + this.direction
                     });
 
                     // Allows the pawn to move two squares
@@ -28,12 +28,12 @@
             }
 
             let leftDiag = {
-                'x': this.x - 1,
-                'y': foward
+                x: this.x - 1,
+                y: foward
             },
             rightDiag = {
-                'x': this.x + 1,
-                'y': foward
+                x: this.x + 1,
+                y: foward
             };
 
             // Checks if a piece is in the pawn "killzone", 

@@ -23,7 +23,7 @@
             
             _.each(_.range(this.x-1, this.x+2), (x) => {
                 _.each(_.range(this.y-1, this.y+2), (y) => {
-                    possible.push({'x' : x, 'y': y});
+                    possible.push({x : x, y: y});
                 });
             });
 

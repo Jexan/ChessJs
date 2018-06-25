@@ -39,7 +39,7 @@
 
 	// Draws Board Black Squares
 	var drawBoard = function(){
-		var x, y, _x, _y, image;
+		var x, y, pieceImgX, pieceImgY, image;
 
 		for (y = 0 ; y < 8 ; y++){
 
@@ -47,10 +47,10 @@
 			x = y % 2 === 0? 0 : 1;
 
 			for( ; x < 8 ; x+=2){
-				_x = x*Game.squareLength;
-				_y = y*Game.squareLength;
+				pieceImgX = x*Game.squareLength;
+				pieceImgY = y*Game.squareLength;
 
-				image = State.game.add.image(_x, _y, Game.assetsKey, Game.assetsAtlas.blackSquare);
+				image = State.game.add.image(pieceImgX, pieceImgY, Game.assetsKey, Game.assetsAtlas.blackSquare);
 				image.scale.x = Game.squareLength / image.width;
 	        	image.scale.y = Game.squareLength / image.height;
 			}
@@ -60,7 +60,7 @@
 	// Fills the board array with piece objects 
 	var populateBoard = function(){
 		
-		_.each(Game.boardRef, function(row, y){
+		Game.boardRef.forEach((row, y) => {
 			if(row.length === 0){
 
 				// Blank squares are null
@@ -70,15 +70,15 @@
 
 			Game.board.push([]);
 
-			_.each(row, function(token, x){
-				var piece, color;
+			row.forEach((token, x) => {
+				let piece, color;
 
-				if (token === '') {
+				if (!token) {
 					Game.board[y].push(null);
 					return;
 				}
 
-				// It checks the last letter and copy 
+				// It checks the last letter and copies 
 				// a reference of the class
 				switch(token.charAt(1)){
 				case 'r':

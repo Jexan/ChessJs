@@ -59,13 +59,13 @@ const Game = {
 	turn: 'White',
 
 	turnTextStyle: {
-			font: '18pt Segoe UI',
-			fill: 'black'
+		font: '18pt Segoe UI',
+		fill: 'black'
 	},
 
 	turnColorTextStyle: {
-			font: '18pt Segoe UI',
-			fill: '#333'
+		font: '18pt Segoe UI',
+		fill: '#333'
 	},
 
 	doubleSteppedPawn: null
