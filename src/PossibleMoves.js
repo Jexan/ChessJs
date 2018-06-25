@@ -7,8 +7,8 @@
     let getPiecesCoordsByColor = function(color){
         let piecesCoords = [];
 
-        Game.board.each((row) => {
-            row.each((piece) => {
+        Game.board.forEach((row) => {
+            row.forEach((piece) => {
                 if( piece !== null &&
                         piece.color == color){
 
@@ -40,7 +40,7 @@
         // We really only get out of board moves for y > 8, 
         // but extra protection is never too much 
         return possibleMoves.filter((move) => {
-         return (move.y < 8 && move.y >= 0) && (move.x < 8 && move.x > 8);    
+            return (move.y < 8 && move.y >= 0) && (move.x < 8 && move.x >= 0);    
         });
     };
 

@@ -9,21 +9,21 @@
             if (!(foward === 8 || foward === -1)) {
                 if (Game.board[foward][this.x] === null) {
                     possibleMoves.push({
-                            'x': this.x,
-                            'y': this.y + this.direction
-                    });
-                }
-
-                // Allows the pawn to move two squares
-                if (!this.hasMoved && 
-                    Game.board[foward+this.direction][this.x] === null) {
-                    
-                    // doubleStep is for en-passant
-                    possibleMoves.push({
                         'x': this.x,
-                        'y': foward + this.direction,
-                        'specialMove': doubleStep
+                        'y': this.y + this.direction
                     });
+
+                    // Allows the pawn to move two squares
+                    if (!this.hasMoved && 
+                            Game.board[foward + this.direction][this.x] === null) {
+                        possibleMoves.push({
+                            x: this.x,
+                            y: foward + this.direction,
+                            
+                            // For handling en-passant
+                            specialMove: doubleStep
+                        });
+                    }
                 }
             }
 
