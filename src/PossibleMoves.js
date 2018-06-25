@@ -7,8 +7,8 @@
     let getPiecesCoordsByColor = function(color){
         let piecesCoords = [];
 
-        _.each(Game.board, function(row){
-            _.each(row, function(piece){
+        Game.board.each((row) => {
+            row.each((piece) => {
                 if( piece !== null &&
                         piece.color == color){
 
@@ -27,9 +27,8 @@
         let piecePosition = getPiecesCoordsByColor(piece.color);
 
         // Cleans off squares occupated by allied pieces
-        possibleMoves = _.filter(possibleMoves, function (move) {
-
-            return !_.some(piecePosition, function (piece) {
+        possibleMoves = possibleMoves.filter((move) => {
+            return !piecePosition.some((piece) => {
                 return move.x === piece.x && move.y === piece.y;
             });
         });
@@ -38,11 +37,11 @@
     };
 
     possible.eliminateOutOfBoard = function (possibleMoves) {
-        let predicate = function (value) {
-            return value.y < 8;
-        };
-
-        return _.filter(possibleMoves, predicate);
+        // We really only get out of board moves for y > 8, 
+        // but extra protection is never too much 
+        return possibleMoves.filter((move) => {
+         return (move.y < 8 && move.y >= 0) && (move.x < 8 && move.x > 8);    
+        });
     };
 
     possible.drawPossible = function (piece, move) {
@@ -68,12 +67,12 @@
 
     // Helper function for Bishop, Rook and Queen
     possible.keepAdding = function(possibleMoves) {
-        return function(x,y){
+        return function(x,y) {
             possibleMoves.push({
-                    'x': x,
-                    'y': y
-                });
-            return Game.board[y][x] !== null
+                'x': x,
+                'y': y
+            });
+            return Game.board[y][x] !== null;
         }
     };
 

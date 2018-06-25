@@ -27,15 +27,14 @@
                 });
             });
 
-            if(encastling){
+            if(encastling)
                 possible.push(encastling);
-            }
 
-            return Game.Possible.eliminateOutOfBoard(possible);
+            return possible;
         }
     }
     
-    let betweenIsEmpty = function(row, king){
+    function betweenIsEmpty (row, king){
         return !(
             row[king.x+king.direction*-1] 
                 ||
@@ -43,7 +42,7 @@
         );
     }
 
-    let encastle = function(king){
+    function encastle (king){
         const tower = Game.board[king.y][king.x+king.direction*-1];
         // When this is called, the king has already moved.
         king.moveToEncastling = false;

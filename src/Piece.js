@@ -9,10 +9,11 @@
             // For Pawn Double Step and Encastling
             this.hasMoved = false;
             this.justDoubleStepped = false;
-            // Determines to where should it move
+
+            // Useful for pawns and transforming queens.
             this.direction = this.color === 'black' ? 1 : -1;
 
-            setupImage.call(this, null);
+            setupImage(this);
         }
 
         move(x, y, specialMove) {
@@ -59,29 +60,28 @@
         };   
     };
 
+    function setupImage (piece) {
+        let pieceName = piece.color + piece.constructor.name,
+            x = piece.x * Game.squareLength,
+            y = piece.y * Game.squareLength;
 
-    let setupImage = function () {
-        let pieceName = this.color + this.constructor.name,
-            x = this.x * Game.squareLength,
-            y = this.y * Game.squareLength;
-
-        this.image = Game.chess.add.image(x, y, Game.assetsKey, Game.assetsAtlas[pieceName]);
+        piece.image = Game.chess.add.image(x, y, Game.assetsKey, Game.assetsAtlas[pieceName]);
 
         // Scales the piece proportional to the squareLength
-        this.image.scale.x = Game.squareLength / this.image.width;
-        this.image.scale.y = Game.squareLength / this.image.height;
+        piece.image.scale.x = Game.squareLength / piece.image.width;
+        piece.image.scale.y = Game.squareLength / piece.image.height;
 
         // Fires up the move routine when clicked
-        this.image.inputEnabled = true;
-        this.image.events.onInputDown.add(handlePossibleMoves, this);
-        this.image.input.priorityID = 0;
+        piece.image.inputEnabled = true;
+        piece.image.events.onInputDown.add(handlePossibleMoves, piece);
+        piece.image.input.priorityID = 0;
     };
 
-    let handlePossibleMoves = function () {
+    function handlePossibleMoves () {
         if(Game.turn.toLowerCase() !== this.color)
             return;
 
-        let possibleMoves = this.getPossibleMoves();
+        let possibleMoves = Game.Possible.eliminateOutOfBoard(this.getPossibleMoves());
 
         Game.state.possibleSquares.removeAll();
 
